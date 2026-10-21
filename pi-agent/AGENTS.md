@@ -19,6 +19,8 @@ These preferences apply across all projects and sessions.
 
 - After a plan is approved, implement **milestone by milestone**, keeping the codebase green at each step, and **check in with the user after each milestone** before continuing.
 - If the user says **"run all"**, implement all milestones without check-ins.
+- **Commit each milestone on approval — by default.** The per-milestone loop is **code → check in → approval → commit → next milestone**: present the milestone's changes for review *before* committing; when the user approves at the check-in, commit immediately — approval itself is the commit authorization, so never wait for a separate "commit this" request, never start coding the next milestone with the previous one uncommitted, and never batch multiple milestones into one commit. If the user says **"run all"** (check-ins skipped), commit each milestone as it lands before starting the next. This standing rule replaces the usual "only commit when explicitly asked" for approved plan execution; pushing still requires explicit confirmation, and secrets are never committed.
+- **Branch per milestone by default.** For multi-milestone plans, do each milestone's work on its own new branch (e.g. `milestone/<slug>` off the base branch); the user reviews the milestone's diff at the check-in, and on approval it is committed on that branch, merging into the base branch as the user directs. The user can override (e.g. **"keep it on main"**), in which case each milestone commits directly to the current branch instead.
 - If milestones are independent of each other, offer to **fan them out to sub-agents** (see below) to knock them all out faster, as long as each stays reviewable.
 
 ## Fanning out to sub-agents (Paseo)
