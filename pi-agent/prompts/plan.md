@@ -8,7 +8,7 @@ You are in **plan mode** for this task: **$ARGUMENTS**
 
 Follow this strictly:
 
-1. **Research only.** Read the relevant files, search the codebase, and run read-only commands (`grep`, `rg`, `ls`, `git log`/`diff`/`status`). You **may** run the test suite, `go build`, and `go vet` to verify assumptions — these are allowed. Do **not** create, modify, or delete any files. Do not commit or push.
+1. **Research only.** Read the relevant files, search the codebase, and run read-only commands (`grep`, `rg`, `ls`, `git log`/`diff`/`status`). You **may** run the test suite, `go build ./...`, and `go vet` to verify assumptions — these are allowed. Do **not** create, modify, or delete any files. Do not commit or push.
    - Trace how the affected code works today: callers, data flow, error paths, and existing test coverage.
    - Check for prior art: similar features already in the codebase whose patterns/conventions should be followed.
    - Check `.plans/` and repo docs for existing plans related to this task.
@@ -58,16 +58,15 @@ Follow this strictly:
    - Rollback strategy, if the change is risky.
 
    ### Risks & open questions
-   - Trade-offs, unknowns, edge cases, security/performance concerns.
+   - Trade-offs, unknowns, security/performance concerns.
    - Backward-compatibility and data-migration considerations, if any.
    - Any decisions the user should make before implementation.
 
    ### Estimate
    - **Code size only**: approximate changed lines, number of files touched, and new surface area. **Never estimate in time units** (hours, days, man-weeks).
-   - Whether it should be split into multiple commits or PRs.
 
 3. **Stop and wait.** End with the plan and wait for the user's approval. Do not start implementing until they explicitly approve (e.g. "go ahead", "looks good"). If they give feedback, revise the plan and re-present it.
-4. **Ask, don't guess.** If the task is ambiguous or has multiple plausible interpretations, ask clarifying questions as part of the plan rather than assuming.
+4. **Ask, don't guess.** If ambiguity would change the approach, ask clarifying questions before writing the plan and wait for answers. Minor ambiguities can be listed under Risks & open questions.
 
 ## After approval
 
@@ -77,9 +76,10 @@ Follow this strictly:
    - If milestones are independent, offer to **fan them out to sub-agents** and knock them all out:
      - For each independent milestone, create an isolated worktree branched off the base (`create_workspace` with `isolation: "worktree"`, `mode: "branch-off"`, one branch per milestone), then spawn a sub-agent into it with `create_agent`.
      - Before spawning, call `list_profiles` and materialize the best-fitting profile (provider/model, modeId, thinkingOptionId, features) into the `create_agent` call; tell the user if no profile fits.
-     - Give each sub-agent a self-contained prompt: goal, exact files/approach from this plan, test plan, and the constraint to keep its branch green. One milestone per sub-agent.
+     - Give each sub-agent a self-contained prompt: goal, exact files/approach from this plan, the per-step test cases and edge/failure cases covered for each step in that milestone, the red-green-refactor rule (rule 7), and the constraint to keep its branch green. One milestone per sub-agent.
      - Leave `notifyOnFinish` on and do not poll. When notifications arrive, review each sub-agent's work, resolve integration/merge order, and report back. Nothing gets committed or pushed without the user asking.
      - Sequential or tightly coupled milestones stay with you; only fan out what is genuinely independent.
 7. **Follow the plan.** Work in the planned order and flag any deviation immediately instead of silently re-planning.
+   - **Red-green-refactor, per step.** Apply the **Test-driven work: red, green, refactor** rule from `~/.pi/agent/AGENTS.md` to each step, starting with the step's first planned test: red → green, one test case at a time, then refactor with the full suite green. Do not write implementation code before a failing test exists for it; if an unplanned test is needed, add it and note it as a deviation.
 
 If no task is given (${1:-}), ask what to plan.
