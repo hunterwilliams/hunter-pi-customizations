@@ -76,7 +76,7 @@ Follow this strictly:
    - If milestones are independent, offer to **fan them out to sub-agents** and knock them all out:
      - For each independent milestone, create an isolated worktree branched off the base (`create_workspace` with `isolation: "worktree"`, `mode: "branch-off"`, one branch per milestone), then spawn a sub-agent into it with `create_agent`.
      - Before spawning, call `list_profiles` and materialize the best-fitting profile (provider/model, modeId, thinkingOptionId, features) into the `create_agent` call; tell the user if no profile fits.
-     - Give each sub-agent a self-contained prompt: goal, exact files/approach from this plan, the per-step test cases and edge/failure cases covered for each step in that milestone, the red-green-refactor rule (rule 7), and the constraint to keep its branch green. One milestone per sub-agent.
+     - Give each sub-agent a self-contained prompt: goal, exact files/approach from this plan, the per-step test cases and edge/failure cases covered for each step in that milestone, the full text of the 'Test-driven work: red, green, refactor' section from ~/.pi/agent/AGENTS.md, copied verbatim into the prompt, plus the per-step deltas from rule 7, and the constraint to keep its branch green. One milestone per sub-agent.
      - Leave `notifyOnFinish` on and do not poll. When notifications arrive, review each sub-agent's work, resolve integration/merge order, and report back. Nothing gets committed or pushed without the user asking.
      - Sequential or tightly coupled milestones stay with you; only fan out what is genuinely independent.
 7. **Follow the plan.** Work in the planned order and flag any deviation immediately instead of silently re-planning.

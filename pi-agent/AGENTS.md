@@ -51,6 +51,7 @@ When the user approves a parallel/fan-out execution of a plan:
 Apply this workflow only in projects that have a test suite; skip it for scripts, docs, and throwaway repos.
 
 1. **Red**: write a failing test for the behaviour. Run it and show it failing before writing any code.
+   - Confirm the test fails for the expected reason. A compile error, missing import, or unrelated failure is not red; fix the test first. A test that passes immediately is also wrong.
 2. **Green**: write the minimum code to pass. Never edit or delete tests to make them pass.
 3. **Refactor**: remove duplication and dead code, improve names, keep tests green.
 4. Report what you refactored. If nothing, say why.
