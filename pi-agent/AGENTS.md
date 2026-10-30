@@ -58,3 +58,11 @@ Apply this workflow only in projects that have a test suite; skip it for scripts
 
 - Keep related logic together; don't split into tiny functions or files without a clear reason.
 - Never commit secrets or credentials.
+
+## Code comments: prefer names over comments
+
+- **Do not add comments narrating individual lines of code.** If a line needs a comment to be understood, the fix is better naming or refactoring, not a comment.
+- Example: `// only do this is_safe because it checks a thread above` above `if (is_safe)` is worse than `if (is_safe_for_thread)` — a naming change removes the need for the comment.
+- Acceptable comments: function-signature-level documentation explaining a function's purpose, contract, or non-obvious behaviour.
+- Only exception: a **key reason that cannot be refactored into a name** — a genuine constraint, workaround, or external requirement that no naming change can express. Then write a brief, precise comment stating the reason, and nothing more.
+- When touching existing code, remove comments that a rename or refactor makes redundant.
